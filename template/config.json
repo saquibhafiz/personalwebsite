@@ -1,0 +1,18 @@
+{
+	"includes": {
+		"header": "header.html",
+		"footer": "footer.html",
+		"navbar": "navbar.html",
+		"jsscripts": "jsscripts.html"
+	},
+
+	"base" : "base.html",
+
+	"content": [
+		"index.html",
+		"contact.html",
+		"about.html",
+		"post.html",
+		"blog"
+	]
+}
