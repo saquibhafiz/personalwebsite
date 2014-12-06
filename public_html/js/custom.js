@@ -10,15 +10,15 @@ function createPosts(template, beg, numOfPostsPerPage) {
 
 function reassureButtonStates(beg, numOfPostsPerPage) {
 	if (beg == 0) {
-		$('#newer').addClass('disbaled');
+		$('#newer').addClass('disabled');
 	} else {
-		$('#newer').removeClass('disbaled');
+		$('#newer').removeClass('disabled');
 	}
 
 	if (Math.floor(beg/numOfPostsPerPage) == Math.floor(posts.length/numOfPostsPerPage)) {
-		$('#older').addClass('disbaled');
+		$('#older').addClass('disabled');
 	} else {
-		$('#older').removeClass('disbaled');
+		$('#older').removeClass('disabled');
 	}
 }
 
@@ -31,14 +31,14 @@ if ($("#post-previews")) {
 	createPosts(template, current, numOfPostsPerPage);
 
 	$('#older').on('click', function() {
-		if(!$(this).hasClass('disbaled')) {
+		if(!$(this).hasClass('disabled')) {
 			current += numOfPostsPerPage;
 			createPosts(template, current, numOfPostsPerPage);
 		}
 	});
 
 	$('#newer').on('click', function() {
-		if(!$(this).hasClass('disbaled')) {
+		if(!$(this).hasClass('disabled')) {
 			current -= numOfPostsPerPage;
 			createPosts(template, current, numOfPostsPerPage);
 		}
