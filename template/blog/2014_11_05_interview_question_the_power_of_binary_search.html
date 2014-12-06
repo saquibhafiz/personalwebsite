@@ -1,0 +1,52 @@
+<p>A common and simple question simple that interviewers use is how to find an item in a sorted list. The answer is always obvious because it is one the first algorithms every programmer learns, binary search. The concept is powerful and simple. Here is a sample of code performing the search in Java :</p>
+<pre><code class="prettyprint">private int binarySearch(int[] array, int goal, int low, int high) {
+    if (low &gt; high) {
+        return -1;
+    }
+
+    int mid = (low + high)/2;
+
+    if (array[mid] == goal) {
+        return mid;
+    } else if (array[mid] &lt; goal) {
+        return binarySearch(array, goal, mid+1, high);
+    } else {
+        return binarySearch(array, goal, low, mid-1);
+    }
+}
+</code></pre>
+<p>However for the first time ever I was asked to do something more difficult. Find the k-th occurrence of an item in an array. The method I was told to write should do the following: <em>return the index of the k-th value if it exists, return -1 otherwise</em>. Sounds simple enough.</p>
+<p>The naive way is obviously the O(n) method of searching through the entire array and finding the item then finding if it appears at least k times. My goal is to reduce this to O(lgn).</p>
+<p>So first lets use the naive method and find the first occurrence of what we want. But how do we do this. This is the same problem we started of with but instead of k-th we want the 1st occurrence. True, however this is actually slightly easier.</p>
+<p>We can achieve this by editing the binary search algorithm by just a few lines that try to learn if it is the first occurrence as such:</p>
+<pre><code class="prettyprint">private int firstBinarySearch(int[] array, int goal, int low, int high) {
+    if (low &gt; high) {
+        return -1;
+    }
+
+    int mid = (low + high)/2;
+
+    if (array[mid] == goal) {
+        if (mid == 0 || array[mid-1] != goal) {
+            return mid;
+        } else {
+            return binarySearch(array, goal, low, mid-1);
+        }
+    } else if (array[mid] &lt; goal) {
+        return binarySearch(array, goal, mid+1, high);
+    } else {
+        return binarySearch(array, goal, low, mid-1);
+    }
+}
+</code></pre>
+<p>So now this method returns the index of the 1st occurrence. Well then we are done because now we can just add k to the index and check of existence as such:</p>
+<pre><code class="prettyprint">private int findKthOccurence(int[] array, int goal, k) {
+    int firstOccurence = firstBinarySearch(array, goal, 0, array.length);
+    k--;
+
+    if (firstOccurence == -1 || array[firstOccurence + k] != goal)
+        return -1;
+    else
+        return firstOccurence + k;
+}
+</code></pre>
