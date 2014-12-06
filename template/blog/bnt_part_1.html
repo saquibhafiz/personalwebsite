@@ -1,0 +1,28 @@
+<p>The most common numerical system is the decimal system. This just means that we use base 10 when defining numbers. Other commonly known/used numerical systems include binary (base 2) and hexadecimal (base 16). Every numerical system can be read once you understand how they are defined. Each digit, in any numerical system, represents a quantity of a certain magnitude. Lets explore this with a simple example: if we have a decimal number 23, this means that there are 2 units of magnitude \(10^1\) and 3 units of magnitude \(10^0\). This is a very abstract understanding that helps us easily understand how other numerical systems work. So 1101 in binary is 1 unit of \(2^0\), 0 units of \(2^1\), 1 unit of \(2^2\) and 1 unit of \(2^3\); which simply translates to 13.</p>
+<p>So far we have explored how to represent numbers in different numerical systems however we have only shown examples with positive numbers. What about negative numbers? Well in most cases we use a signal of some kind to signify negation. In decimal we use a '\(-\)' sign to mean negative. In binary it is common practice for the most significant is 1 if its negative and 0 otherwise.</p>
+<p>Now let us discuss negative bases, this refers to bases that are \(&lt; 0\). This seems like an unusual topic but it helps us perform some interesting magic. From now on I will mainly discuss base negative two as an example but the topics covered can be abstracted over all negative bases.</p>
+<p>Reading a number is the same process so 1101 in base negative is&nbsp;\(1*-2^0 + 0*-2^1 + 1*-2^2 + 1*-2^3 = -3\). Similarly 101 in bnt is 5. Notice how we cannot represent both positive and negative numbers in in this numerical system without the need of a signal. This is the power of negative bases.</p>
+<p>I am going to be representing bnt numbers in an array where the index represents the significance of the digit, as in array[0] is the least significant digit and array[array.length-1] is the most significant digit; Let's define a few utility functions that we can use in the future. The obvious one is converting bnt numbers into decimal:</p>
+<pre class="prettyprint"><code class="language-js">function bntToDec(n) {
+	var current = 1, result = 0;
+
+	for (var i = 0; i &lt; n.length; i++) {
+		result += current * n[i];
+		current *= -2;
+	}
+
+	return result;
+}
+</code></pre>
+<p>Converting from decimal to bnt is a slightly different different problem but still simple:</p>
+<pre class="prettyprint"><code class="language-js">function decToBNT(n) {
+	var arr = [], i = 0;
+
+	while (n != 0) {
+		arr.push(Math.abs(n % -2));
+		n = Math.ceil(n / -2);
+	}
+
+	return arr;
+}</code></pre>
+<p>In the next part I will discuss bnt arithmetic such as negation, addition, subtraction and much more.</p>

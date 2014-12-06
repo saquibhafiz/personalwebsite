@@ -17,6 +17,12 @@
     <!-- Clean Blog CSS -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
 
+    <!-- Prettify CSS -->
+    <link href="css/prettify.css" rel="stylesheet">
+
+    <!-- Hemisu Light CSS -->
+    <link href="css/tomorrow-night-bright.css" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link href="css/custom.css" rel="stylesheet">
 
@@ -108,7 +114,7 @@
                 <ul class="list-inline text-center">
                     <li>
                         <a href="#">
-                            <span class="fa-stack fa-lg">
+                            <span class="fa-stack fa-lg" target="_blank">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
                             </span>
@@ -116,14 +122,14 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span class="fa-stack fa-lg">
+                            <span class="fa-stack fa-lg" target="_blank">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
                             </span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://github.com/saquibhafiz" target="_blank">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -146,8 +152,20 @@
 <!-- Custom Theme JavaScript -->
 <script src="js/clean-blog.min.js"></script>
 
+<!-- Prettify JavaScript -->
+<script src="js/google-code-prettify/prettify.js"></script>
+<script type="text/javascript">
+$( document ).ready(function() {
+	! function ($) {
+	    $(function () {
+	        window.prettyPrint && prettyPrint()
+	    })
+	}(window.jQuery)
+});
+</script>
+
 <!-- MathJax JavaScript -->
-<script src="js/MathJax-2.4-latest/MathJax.js"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 </body>
 

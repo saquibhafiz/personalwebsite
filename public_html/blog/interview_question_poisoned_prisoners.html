@@ -12,19 +12,19 @@
     <title>Saquib Hafiz</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Clean Blog CSS -->
-    <link href="css/clean-blog.min.css" rel="stylesheet">
+    <link href="../css/clean-blog.min.css" rel="stylesheet">
 
     <!-- Prettify CSS -->
-    <link href="css/prettify.css" rel="stylesheet">
+    <link href="../css/prettify.css" rel="stylesheet">
 
     <!-- Hemisu Light CSS -->
-    <link href="css/tomorrow-night-bright.css" rel="stylesheet">
+    <link href="../css/tomorrow-night-bright.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -53,20 +53,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Saquib Hafiz</a>
+            <a class="navbar-brand" href="../index.html">Saquib Hafiz</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="index.html">Home</a>
+                    <a href="../index.html">Home</a>
                 </li>
                 <li>
-                    <a href="about.html">About</a>
+                    <a href="../about.html">About</a>
                 </li>
                 <li>
-                    <a href="contact.html">Contact</a>
+                    <a href="../contact.html">Contact</a>
                 </li>
             </ul>
         </div>
@@ -77,80 +77,39 @@
 
     <!-- Page Header -->
 <!-- Set your background image for this header on the line below. -->
-<header class="intro-header" style="background-image: url('img/home-bg.jpg')">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="site-heading">
-                <h1>Saquib Hafiz</h1>
-                <hr class="small">
-                <span class="subheading">my opinion, my code, my life</span>
+<header class="intro-header" style="background-image: url('https://farm4.staticflickr.com/3074/2913113348_2f4f661862_o.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Interview Question: Poisoned Prisoners</h1>
+                    <h2 class="subheading">How I broke down one problem into another</h2>
+                    <span class="meta">Posted on March 29th 2014</span>
+                    <div class="meta">Background image by <a href="https://www.flickr.com/photos/generated/2913113348/">Jared Tarbell</a></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-<div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    Man must explore, and this is exploration at its greatest
-                </h2>
-                <h3 class="post-subtitle">
-                    Problems look mighty small from 150 miles up
-                </h3>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 24, 2014</p>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p><strong>Challenge:</strong></p>
+<p>A king receives 1000 bottles of wine, 1 of which he knows to be poisoned. He does not know which bottle is poisoned so he will use ten prisoners to test the wine. The king wants this task done quickly so he can start drinking his wine as soon as possible so he hires you to find the fastest way to solve this wasting as little wine as possible. The prisoners are only allowed have wine once a day. Even the smallest amount of the poisoned wine is enough to poison and kill a prisoner.</p>
+<p></p>
+<p><strong>Solution:</strong></p>
+<p>For this lets assume that when a prisoner drinks wine he has a insignificantly small amount.</p>
+<p>In this case most people start by making each prisoner try 100 wine each. The naive path to take here is having each prisoner drink it one at a time taking (at worst) 100 days to find the poisoned wine. This is not bad however what if we mix 100 of the samples into one drink.</p>
+<p>Now each prisoner tries 100 wine samples at once so when a prisoner gets poisoned we know which 100 bottles hold the poisoned bottle. We can redo this with 100 bottles and 9 prisoners each trying 11 and one trying 12. We can redo this again once we find the 12 possible poisoned bottles and have 8 prisoners 1 or 2 each. We may find the one here or we may have to go another day. This method takes at worst 4 days and at best 3. This is a lot better than our previous 100 day result.</p>
+<p>However we can mix the wines is a smarter way. Firstly lets number each bottle from 1 to 1000. Each of these numbers have a binary representation that can be written in 10 digits. Lets number the prisoners from 1 to 10. Now we serve the wine to the nth prisoner if the nth digit in the binary representation is 1. As previously done we mix the sample together so each prisoner can drink it in one day. Now a set of prisoners will die and we can use their number to recreate the number. Example if the prisoners 3, 5, 6, 9 die then we get 308. This means that wine number 308 is poisoned. We can do this because each number has a unique binary representation which has a bijection to the set of poisoned prisoners. Thus knowing the set we can use the bijection to figure out the bottle number accurately in 1 day.</p>
+
+            </div>
         </div>
-        <hr>
-        <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
-                </h2>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 18, 2014</p>
-        </div>
-        <hr>
-        <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    Science has not yet mastered prophecy
-                </h2>
-                <h3 class="post-subtitle">
-                    We predict too much for the next year and yet far too little for the next ten.
-                </h3>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on August 24, 2014</p>
-        </div>
-        <hr>
-        <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    Failure is not an option
-                </h2>
-                <h3 class="post-subtitle">
-                    Many say exploration is part of our destiny, but it’s actually our duty to future generations.
-                </h3>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on July 8, 2014</p>
-        </div>
-        <hr>
-        <!-- Pager -->
-        <ul class="pager">
-            <li class="newer">
-                <a href="#">&larr; Newer Posts</a>
-            </li>
-            <li class="older">
-                <a href="#">Older Posts &rarr;</a>
-            </li>
-        </ul>
     </div>
-</div>
+</article>
 
     <hr>
 
@@ -192,16 +151,16 @@
 </footer>
 
     <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
+<script src="../js/jquery.min.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="js/clean-blog.min.js"></script>
+<script src="../js/clean-blog.min.js"></script>
 
 <!-- Prettify JavaScript -->
-<script src="js/google-code-prettify/prettify.js"></script>
+<script src="../js/google-code-prettify/prettify.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
 	! function ($) {

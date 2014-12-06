@@ -1,6 +1,6 @@
 <!-- Page Header -->
 <!-- Set your background image for this header on the line below. -->
-<header class="intro-header" style="background-image: url('{{ imageURL }}')">
+<header class="intro-header" style="background-image: url('{{ image.url }}')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -8,6 +8,7 @@
                     <h1>{{ title }}</h1>
                     <h2 class="subheading">{{ subtitle }}</h2>
                     <span class="meta">Posted on {{ date }}</span>
+                    <div class="meta">Background image by <a href="{{ image.page }}">{{ image.owner }}</a></div>
                 </div>
             </div>
         </div>

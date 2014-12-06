@@ -1,8 +1,10 @@
 var fs = require('fs'),
     path = require('path'),
+    https = require('https'),
     handlebars = require('./handlebars'),
     _ = require('./underscore'),
-    config_file = 'config.json';
+    config_file = 'config.json',
+    api_key = '8426517cd4b2103f2f84f4ef908c5c7b';
 
 function getFileContent(filePath) {
     return fs.readFileSync(filePath,'utf8')
@@ -10,6 +12,45 @@ function getFileContent(filePath) {
 
 function compileFile(filePath) {
     return handlebars.compile(getFileContent(filePath));
+}
+
+function getFlickrInfo(data, imageID, callback) {
+    https.request({
+        host: 'api.flickr.com',
+        path: '/services/rest/?method=flickr.photos.getInfo&api_key=' + api_key + '&photo_id=' + imageID + '&format=json&nojsoncallback=1'
+    }, function(response) {
+        var str = '';
+
+        response.on('data', function(chunk) {
+            str += chunk;
+        })
+
+        response.on('end', function() {
+            var flickrOwner = JSON.parse(str);
+
+            https.request({
+                host: 'api.flickr.com',
+                path: '/services/rest/?method=flickr.photos.getSizes&api_key=' + api_key + '&photo_id=' + imageID + '&format=json&nojsoncallback=1'
+            }, function(response) {
+                var str = '';
+
+                response.on('data', function(chunk) {
+                    str += chunk;
+                })
+
+                response.on('end', function() {
+                    var flickrURL = JSON.parse(str);
+
+                    callback({
+                        owner: flickrOwner.photo.owner.realname,
+                        page: flickrOwner.photo.urls.url[0]._content,
+                        url: flickrURL.sizes.size.pop().source
+                    });
+                })
+            }).end();
+        })
+    }).end();
+
 }
 
 function createStaticFile(filePath, base, data, body) {
@@ -23,9 +64,16 @@ function createStaticFile(filePath, base, data, body) {
 }
 
 function createBlogPost(post, blogBase, base, data) {
-    var filePath = post.entry,
-        body = blogBase(_.extend(post, { entry: getFileContent('template' + path.sep + 'blog' + path.sep + post.entry) }));
-    createStaticFile('blog' + path.sep + filePath, base, data, body);
+    var filePath = post.entry;
+
+    getFlickrInfo(data, post.imageID, function(image) {
+        var body = blogBase(_.extend(post, { 
+            entry: getFileContent('template' + path.sep + 'blog' + path.sep + post.entry),
+            image: image
+        }));
+        createStaticFile('blog' + path.sep + filePath, base, data, body);
+    });
+    
 }
 
 function getDefaultData(depth) {
@@ -68,26 +116,23 @@ function compileAll() {
     createStaticFile('index.html', parts.base, data);
     createStaticFile('about.html', parts.base, data);
     createStaticFile('contact.html', parts.base, data);
-    createStaticFile('post.html', parts.base, data);
 
     data['depth'] = "../";
     updateData(data, parts);
 
     for (var i in posts) {
-        var post = posts[i];
-
-        createBlogPost(post, parts.blogBase, parts.base, data);
+        createBlogPost(posts[i], parts.blogBase, parts.base, data);
     }
 }
 
-if (process.argv[2] && process.argv[2] == "-p") {
+if (process.argv.length >= 3) {
     var posts = getPostsObject(),
         data = getDefaultData("../"),
         parts = compiledParts();
 
     updateData(data, parts);
 
-    createBlogPost(post, blogBase, base, data);
+    createBlogPost(posts[parseInt(process.argv[2])], parts.blogBase, parts.base, data);
 } else {
     compileAll();
 }

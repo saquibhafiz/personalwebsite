@@ -1,3 +1,9 @@
 .intro-header {
+	background-color: black;
 	background-attachment: fixed;
+}
+
+pre.prettyprint {
+	padding: 10px;
+	font-size: 16px;
 }
