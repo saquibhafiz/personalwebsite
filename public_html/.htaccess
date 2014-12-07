@@ -1,0 +1,4 @@
+     AddHandler cgi-script .phtml
+     AddHandler cgi-script .php
+ErrorDocument 404 /~s3hafiz/notfound.html
+
