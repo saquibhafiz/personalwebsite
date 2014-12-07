@@ -43,6 +43,7 @@ function getFlickrInfo(data, imageID, callback) {
 
                     callback({
                         owner: flickrOwner.photo.owner.realname,
+                        user: flickrOwner.photo.owner.username,
                         page: flickrOwner.photo.urls.url[0]._content,
                         url: flickrURL.sizes.size.pop().source
                     });

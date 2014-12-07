@@ -1,0 +1,3 @@
+printf "var posts = " > public_html/js/posts.js;
+cat template/blog/posts.json >> public_html/js/posts.js;
+echo ";" >> public_html/js/posts.js;

@@ -1,9 +1,26 @@
 .intro-header {
 	background-color: black;
 	background-attachment: fixed;
+	text-shadow: 0 0 8px black;
 }
 
 pre.prettyprint {
 	padding: 10px;
 	font-size: 16px;
+}
+
+.job {
+	font-size: 17px;
+}
+
+.job-company {
+	font-weight: 800;
+}
+
+.job-dates {
+	font-style: italic;
+}
+
+.job-details ul{
+	padding-left: 27px;
 }
