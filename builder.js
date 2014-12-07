@@ -1,5 +1,4 @@
 var fs = require('fs'),
-    path = require('path'),
     https = require('https'),
     handlebars = require('./handlebars'),
     _ = require('./underscore'),
@@ -58,10 +57,10 @@ function createStaticFile(filePath, base, data, body) {
     if (body) {
         data['body'] = body;
     } else {
-        data['body'] = getFileContent('template' + path.sep + filePath);        
+        data['body'] = getFileContent('template/' + filePath);        
     }
 
-    fs.writeFileSync('public_html' + path.sep + filePath, base(data));
+    fs.writeFileSync('public_html/' + filePath, base(data));
 }
 
 function createBlogPost(post, blogBase, base, data) {
@@ -69,10 +68,10 @@ function createBlogPost(post, blogBase, base, data) {
 
     getFlickrInfo(data, post.imageID, function(image) {
         var body = blogBase(_.extend(post, { 
-            entry: getFileContent('template' + path.sep + 'blog' + path.sep + post.entry),
+            entry: getFileContent('template/' + 'blog/' + post.entry),
             image: image
         }));
-        createStaticFile('blog' + path.sep + filePath, base, data, body);
+        createStaticFile('blog/' + filePath, base, data, body);
     });
     
 }
