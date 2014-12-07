@@ -1,0 +1,2 @@
+rm -R $HOME/public_html;
+cp -R public_html/ ../;
