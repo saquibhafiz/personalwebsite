@@ -29,6 +29,10 @@ td {
     font-size: 16px;
 }
 
+tr {
+    cursor: pointer;
+}
+
 td:hover {
     color: #0085a1;
 }
