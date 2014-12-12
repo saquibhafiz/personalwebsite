@@ -85,9 +85,9 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>Base Negative Two (BNT): Part 1 - A Simple Understanding</h1>
-                    <h2 class="subheading">Number systems and the power of negative based number systems</h2>
-                    <span class="meta">Posted on November 7th 2014</span>
+                    <h1>Base Negative Two (BNT): Part 2 - Negation, Addition and Subtraction</h1>
+                    <h2 class="subheading">Basic math with BNT and generic neagative base systems</h2>
+                    <span class="meta">Posted on December 7th 2014</span>
                     <div class="meta">Background image by <a href="https://www.flickr.com/photos/mcclanahoochie/5068845349/">Chris McClanahan (mcclanahoochie)</a> <a href="http://creativecommons.org/licenses/by-sa/4.0/legalcode">&#0169;</a></div>
                 </div>
             </div>
@@ -101,48 +101,107 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>
-    The most common numerical system is the decimal system. This just means that we use base 10 when defining numbers. Other commonly known/used numerical systems include binary (base 2) and hexadecimal (base 16). Every numerical system can be read once you understand how they are defined. Each digit, in any numerical system, represents a quantity of a certain magnitude. Lets explore this with a simple example: if we have a decimal number 23, this means that there are 2 units of magnitude \(10^1\) and 3 units of magnitude \(10^0\). This is a very abstract understanding that helps us easily understand how other numerical systems work. So 1101 in binary is 1 unit of \(2^0\), 0 units of \(2^1\), 1 unit of \(2^2\) and 1 unit of \(2^3\); which simply translates to 13.
+    Previously we discussed the negative number systems and the potential they contain. My goal is to explore this field and see how far I can go by expanding the possibilites of this basis. However to go any further we must first go over the basics, adding, subtracting, multiplying, dividing, negation, etc. Basically we need to learn how to perform arithmetic natively in this number system. This entry we will talk about the easiest ones, negation, addition and subtraction.
 </p>
 <p>
-    So far we have explored how to represent numbers in different numerical systems however we have only shown examples with positive numbers. What about negative numbers? Well in most cases we use a signal of some kind to signify negation. In decimal we use a '\(-\)' sign to mean negative. In binary it is common practice for the most significant is 1 if its negative and 0 otherwise.
+    Negation is a fun case when it comes to negative bases. Unlike the our natural number systems, the negation is implicit in the actual numbers rather then explicitly as a symbol ( - ) or digit. So how do we negate a number in this number system? After some pondering I decided to use a very simple and useful approach. 
 </p>
 <p>
-    Now let us discuss negative bases, this refers to bases that are \(&lt; 0\). This seems like an unusual topic but it helps us perform some interesting magic. From now on I will mainly discuss base negative two as an example but the topics covered can be abstracted over all negative bases.
+    We know that \(-2x + x = -x\). This seems simple and useless and first until you realize that -2 is the same as a left shift, a simple operation that multiples the number by the base. Now all we have left to do is add the two numbers. However instead of using the usual add function (mostly because I hadn't written it yet) I decided to figure how to do it in the same function. There are 4 possible casses: \(0 + 0 = 0\), \(1 + 0 = 1\), \(0 + 1 = 1\) and \(1 + 1 = tricky\). Why is \(1 + 1\) tricky; because \(-2^n + -2^n = -2^{n+2} + -2^{n+1}\), with respect to the nth digit. 
 </p>
 <p>
-    Reading a number is the same process so 1101 in base negative is&nbsp;\(1*-2^0 + 0*-2^1 + 1*-2^2 + 1*-2^3 = -3\). Similarly 101 in bnt is 5. Notice how we cannot represent both positive and negative numbers in in this numerical system without the need of a signal. This is the power of negative bases.
+    We would have to implement this anyways for the addition function but I discovered an interesting observation. We know that if that x at n is 1 then -2x at n+1 is 1 as well since they are the same. This is useful because \(2^{n+2} + -2^{n+1} = - {-2}^{n+1}\) which means that essential we can add -1 to the n+1 digit which we know is 1, thus automatically turning it to a 0. Using this cheat we construct the following function which turns a number negative in O(n) time where n is the number of digits in the answer.
 </p>
-<p>
-    I am going to be representing bnt numbers in an array where the index represents the significance of the digit, as in array[0] is the least significant digit and array[array.length-1] is the most significant digit; Let's define a few utility functions that we can use in the future. The obvious one is converting bnt numbers into decimal:
-</p>
-<pre class="prettyprint"><code class="language-js">function bntToDec(n) {
-    var current = 1, result = 0;
+<pre class="prettyprint"><code class="language-js">// based on the fact that -2x + x = -x
+function negateBNT(n) {
+    var result = [], carry = 0;
 
-    for (var i = 0; i &lt; n.length; i++) {
-        result += current * n[i];
-        current *= -2;
+    for (var i = 0; i <= n.length; i++) {
+        // the digit is the sum of the bottom digit
+        // plus the top digit plus the carry
+        var digit = (i < n.length ? n[i] : 0) + 
+                    (i-1 >= 0 ? n[i-1] : 0) + carry;
+
+        if (digit > 1) {
+            carry = -1;
+            digit = 0;
+        } else {
+            carry = 0;
+        }
+
+        result.push(digit);
     }
 
-    return result;
+    return removeTrailingZeroes(result);
+}
+
+// just removes trailing zeroes that I was getting
+// useful for other future functions
+function removeTrailingZeroes(n) {
+    while (n[n.length - 1] == 0) {
+        n.pop();
+    }
+
+    return n;
 }
 </code></pre>
 <p>
-    Converting from decimal to bnt is a slightly different different problem but still simple:
+    We can reuse most of the code from negation in addition since we essentially add in it. But now we have to consider the case when we perform \(1 + 1\) at bit \(n\) but we dont have a 1 in either number at digit \(n+1\). We find that then \(1 + 1 = 110\) which allows us to add those to the carry value naturally. By acting on this special case where we check for a 1 in the \(n+1\) digit allows us to make sure the carry digit never goes above 1 so the highest single addition operation we have to worry about is \(1 + 1 + 1 = 111\) which we deal the same we deal with the previous case.
 </p>
-<pre class="prettyprint"><code class="language-js">function decToBNT(n) {
-    var arr = [], i = 0;
+<pre class="prettyprint"><code class="language-js">function addBNTs(a, b) {
+    var carry = [0], result = [];
 
-    while (n != 0) {
-        arr.push(Math.abs(n % -2));
-        n = Math.ceil(n / -2);
+    for (var i = 0; i < Math.max(a.length, b.length) + 2; i++) {
+        var sum = (a.length > i ? a[i] : 0) + 
+                (b.length > i ? b[i] : 0) + 
+                carry[i];
+
+        var digit = sum % 2;
+
+        result[i] = digit;
+
+        if (sum > 1) {
+            if ((a.length > i+1 && a[i+1] == 1) ||
+                (b.length > i+1 && b[i+1] == 1)) {
+                carry[i+1] = -1;
+            } else {
+                carry[i+1] = 1;
+                carry[i+2] = 1;
+            }
+        } else {
+            if (carry.length == i+1) {
+                carry[i+1] = 0;
+            }
+        }
     }
 
-    return arr;
-}</code></pre>
+    return removeTrailingZeroes(result);
+}
+</code></pre>
 <p>
-    In the next part I will discuss bnt arithmetic such as negation, addition, subtraction and much more.
+    Instead of having subtraction be addition of negation I decided to write the function by hand. This one is actually easier because unlike the usual subtraction process there is no carrying of digits. Instead I still add carries similar to the process in addition and negation. The only special case is \(0 - 1\) because every other case is intuitive. Previously we have discused how \(-1 ~= 11\) thus \(0 - 1 ~= -1 ~= 11\). So we make the current digit 1 and add 1 to the carry.
 </p>
+<pre class="prettyprint"><code class="language-js">function subBNTs(a, b) {
+    var carry = [0], result = [];
 
+    for (var i = 0; i < Math.max(a.length, b.length) + 2; i++) {
+        var diff = (a.length > i ? a[i] : 0) - 
+                (b.length > i ? b[i] : 0) + 
+                carry[i];
+        
+        if (diff < 0) {
+            carry[i+1] = 1;
+            diff = 1;
+        } else {
+            carry[i+1] = 0;
+        }
+
+        result[i] = diff;
+    }
+
+    return removeTrailingZeroes(result);
+}
+</code></pre>
             </div>
         </div>
     </div>

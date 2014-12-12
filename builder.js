@@ -115,6 +115,7 @@ function compileAll() {
 
     createStaticFile('index.html', parts.base, data);
     createStaticFile('about.html', parts.base, data);
+    createStaticFile('archive.html', parts.base, data);
     createStaticFile('contact.html', parts.base, data);
 
     data['depth'] = "../";
