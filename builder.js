@@ -3,7 +3,7 @@ var fs = require('fs'),
     handlebars = require('./handlebars'),
     _ = require('./underscore'),
     config_file = 'config.json',
-    api_key = '8426517cd4b2103f2f84f4ef908c5c7b';
+    api_key = getFileContent('flickr.key');
 
 function getFileContent(filePath) {
     return fs.readFileSync(filePath,'utf8')
