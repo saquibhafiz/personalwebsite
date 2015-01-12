@@ -3,7 +3,7 @@ var fs = require('fs'),
     handlebars = require('./handlebars'),
     _ = require('./underscore'),
     config_file = 'config.json',
-    api_key = getFileContent('flickr.key');
+    flickr_api_key = getFileContent('flickr.key').substr(0, 32);
 
 function getFileContent(filePath) {
     return fs.readFileSync(filePath,'utf8')
@@ -14,9 +14,9 @@ function compileFile(filePath) {
 }
 
 function getFlickrInfo(data, imageID, callback) {
-    https.request({
+    https.get({
         host: 'api.flickr.com',
-        path: '/services/rest/?method=flickr.photos.getInfo&api_key=' + api_key + '&photo_id=' + imageID + '&format=json&nojsoncallback=1'
+        path: '/services/rest/?method=flickr.photos.getInfo&api_key=' + flickr_api_key + '&photo_id=' + imageID + '&format=json&nojsoncallback=1'
     }, function(response) {
         var str = '';
 
@@ -27,9 +27,9 @@ function getFlickrInfo(data, imageID, callback) {
         response.on('end', function() {
             var flickrOwner = JSON.parse(str);
 
-            https.request({
+            https.get({
                 host: 'api.flickr.com',
-                path: '/services/rest/?method=flickr.photos.getSizes&api_key=' + api_key + '&photo_id=' + imageID + '&format=json&nojsoncallback=1'
+                path: '/services/rest/?method=flickr.photos.getSizes&api_key=' + flickr_api_key + '&photo_id=' + imageID + '&format=json&nojsoncallback=1'
             }, function(response) {
                 var str = '';
 
@@ -137,3 +137,4 @@ if (process.argv.length >= 3) {
 } else {
     compileAll();
 }
+
